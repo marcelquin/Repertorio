@@ -1,9 +1,9 @@
 1.
 estruturação de pastas----ok
 2
-criação de entidades
+criação de entidades...ok
 3. 
-relacionamentos JPA
+relacionamentos JPA...ok
 4.
 repositores 
 5. 
