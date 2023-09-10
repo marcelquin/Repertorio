@@ -1,0 +1,14 @@
+1.
+estruturação de pastas----ok
+2
+criação de entidades
+3. 
+relacionamentos JPA
+4.
+repositores 
+5. 
+services
+6.
+controllers
+7.
+teste
