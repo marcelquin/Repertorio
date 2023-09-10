@@ -5,7 +5,7 @@ criação de entidades...ok
 3. 
 relacionamentos JPA...ok
 4.
-repositores 
+repositores....ok
 5. 
 services
 6.
