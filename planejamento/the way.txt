@@ -28,7 +28,26 @@ services
 }
 6.
 controllers
+{
+	musica
+	estrutura.... ok
+	pronto..ok
+	confgurar swagger...ok
+	
+	integrante
+	estrutura.... ok
+	pronto..ok
+	confgurar swagger...ok
+
+	Eventos
+	estrutura.... ok
+	pronto..ok
+	confgurar swagger...ok
+
+	Banda
+	estrutura.... ok
+	pronto..ok
+	confgurar swagger...ok
+}
 7.
-configurar swagger
-8.
 teste
