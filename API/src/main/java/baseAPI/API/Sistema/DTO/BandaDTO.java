@@ -15,6 +15,7 @@ public class BandaDTO {
     private Long id;
     private String nome;
     private String razaoSocial;
+    private byte[] logo;
     private Ritmo ritmo;
     private List<Integrante> integrantes;
     private List<Eventos> eventos;

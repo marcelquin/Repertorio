@@ -16,8 +16,9 @@ public class EventosDTO {
     private String contratante;
     private String evento;
     private Date data;
+    private byte[] banner;
     private Double valorCache;
-    private String contrato;
+    private byte[] contrato;
     private List<Musica> musicas;
 
 }

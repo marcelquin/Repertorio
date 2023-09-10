@@ -38,7 +38,8 @@ public class Integrante {
     private String estado;
     @Enumerated
     private Cargo instrumentista;
-    private String foto;
+    @Lob
+    private byte[] foto;
     @Column(length = 11)
     private Long telefone;
     @Column(length = 11)

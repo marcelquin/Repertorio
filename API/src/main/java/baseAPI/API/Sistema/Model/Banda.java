@@ -22,7 +22,8 @@ public class Banda {
     private String nome;
     @Column(name = "razao_Social")
     private String razaoSocial;
-    private String logo;
+    @Lob
+    private byte[] logo;
     @Enumerated
     private Ritmo ritmo;
     @OneToMany

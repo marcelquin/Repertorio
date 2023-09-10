@@ -24,6 +24,7 @@ public class IntegranteDTO {
     private String cidade;
     private String estado;
     private Cargo instrumentista;
+    private byte[] foto;
     private Long telefone;
     private Long telefone2;
     private String email;

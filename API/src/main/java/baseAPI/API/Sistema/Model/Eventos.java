@@ -23,10 +23,12 @@ public class Eventos {
     private String contratante;
     private String evento;
     private Date data;
-    private String banner;
+    @Lob
+    private byte[] banner;
     @Column(name = "Valor_Cache")
     private Double valorCache;
-    private String contrato;
+    @Lob
+    private byte[] contrato;
     @OneToMany
     private List<Musica> musicas;
 }

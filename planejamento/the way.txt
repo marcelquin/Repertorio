@@ -8,7 +8,27 @@ relacionamentos JPA...ok
 repositores....ok
 5. 
 services
+{
+	musica
+	estrutura.... ok
+	pronto..ok
+	
+	integrante
+	estrutura.... ok
+	pronto...ok
+
+	Eventos
+	estrutura.... ok
+	pronto...ok
+
+	Banda
+	estrutura.... ok
+	pronto....ok
+	
+}
 6.
 controllers
 7.
+configurar swagger
+8.
 teste
