@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,8 +46,8 @@ public class IntegranteController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @GetMapping("/buscarporid")
-    public ResponseEntity<IntegranteDTO> buscarPorId(Long id){
+    @GetMapping(value = "/buscarporid", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<IntegranteDTO> buscarPorId(@RequestParam Long id){
         return new ResponseEntity<IntegranteDTO>(service.buscarPorId(id).getBody(), HttpStatus.OK);
     }
 
@@ -58,8 +59,8 @@ public class IntegranteController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @GetMapping("/buscarpornome")
-    public ResponseEntity<IntegranteDTO> BuscarPorNome(String nome){
+    @GetMapping(value = "/buscarpornome", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<IntegranteDTO> BuscarPorNome(@RequestParam String nome){
         return new ResponseEntity<IntegranteDTO>(service.BuscarPorNome(nome).getBody(), HttpStatus.OK);
     }
 
@@ -71,8 +72,8 @@ public class IntegranteController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @PostMapping("/salvar")
-    public ResponseEntity<IntegranteDTO> Salvar(IntegranteDTO integranteDTO, MultipartFile file)  throws IOException {
+    @PostMapping(value = "/salvar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<IntegranteDTO> Salvar(@RequestParam("IntegranteDTO") IntegranteDTO integranteDTO, @RequestPart MultipartFile file)  throws IOException {
         return new ResponseEntity<IntegranteDTO>(service.Salvar(integranteDTO, file).getBody(), (HttpStatusCode) HttpStatus.CREATED);
     }
 
@@ -84,8 +85,8 @@ public class IntegranteController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @PutMapping("/editar")
-    public ResponseEntity<IntegranteDTO> Editar(Long id,IntegranteDTO integranteDTO,MultipartFile file){
+    @PutMapping(value = "/editar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<IntegranteDTO> Editar(@RequestParam Long id, @RequestParam("IntegranteDTO") IntegranteDTO integranteDTO,@RequestPart MultipartFile file){
        return new ResponseEntity<IntegranteDTO>(service.Editar(id, integranteDTO, file).getBody(), HttpStatus.OK);
     }
 
@@ -96,8 +97,8 @@ public class IntegranteController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @DeleteMapping("/deletar")
-    public ResponseEntity<IntegranteDTO> Excluir(Long id){
+    @DeleteMapping(value = "/deletar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<IntegranteDTO> Excluir(@RequestParam  Long id){
         return new ResponseEntity<IntegranteDTO>(service.Excluir(id).getBody(), HttpStatus.OK);
     }
 }

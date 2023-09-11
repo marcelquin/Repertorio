@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,8 +47,8 @@ public class BandaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @GetMapping("/buscarporid")
-    public ResponseEntity<BandaDTO> buscarPorId(Long id){
+    @GetMapping(value = "/buscarporid", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BandaDTO> buscarPorId(@RequestParam Long id){
         return new ResponseEntity<BandaDTO>(service.buscarPorId(id).getBody(), HttpStatus.OK);
     }
 
@@ -58,8 +59,8 @@ public class BandaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @PostMapping("/salvar")
-    public ResponseEntity<BandaDTO> Salvar(BandaDTO bandaDTO, MultipartFile logo, IntegranteDTO integranteDTO, EventosDTO eventosDTO){
+    @PostMapping(value = "/salvar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BandaDTO> Salvar(@RequestParam("BandaDTO") BandaDTO bandaDTO, @RequestPart MultipartFile logo, @RequestParam("IntegranteDTO") IntegranteDTO integranteDTO, @RequestParam("EventosDTO") EventosDTO eventosDTO){
         return new ResponseEntity<BandaDTO>(service.Salvar(bandaDTO, logo, integranteDTO,eventosDTO).getBody(), HttpStatus.CREATED);
     }
 
@@ -70,8 +71,8 @@ public class BandaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @PutMapping("/editar")
-    public ResponseEntity<BandaDTO> Editar(Long id,BandaDTO bandaDTO, MultipartFile logo, IntegranteDTO integranteDTO, EventosDTO eventosDTO){
+    @PutMapping(value = "/editar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BandaDTO> Editar(@RequestParam Long id,@RequestParam("BandaDTO") BandaDTO bandaDTO,  @RequestPart MultipartFile logo, @RequestParam("IntegranteDTO") IntegranteDTO integranteDTO, @RequestParam("EventosDTO") EventosDTO eventosDTO){
         return new ResponseEntity<BandaDTO>(service.Editar(id,bandaDTO,logo, integranteDTO, eventosDTO).getBody() ,HttpStatus.OK);
     }
 
@@ -82,8 +83,8 @@ public class BandaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @DeleteMapping("/deletar")
-    public ResponseEntity<BandaDTO> Excluir(Long id){
+    @DeleteMapping(value = "/deletar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BandaDTO> Excluir(@RequestParam Long id){
         return new ResponseEntity<BandaDTO>(service.Excluir(id).getBody(), HttpStatus.OK);
     }
 }

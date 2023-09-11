@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,8 +42,8 @@ public class MusicaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @GetMapping("/buscarporid")
-    public ResponseEntity<MusicaDTO> buscarPorId(Long id){
+    @GetMapping(value = "/buscarporid", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MusicaDTO> buscarPorId(@RequestParam Long id){
         return new ResponseEntity<MusicaDTO>(service.buscarPorId(id).getBody(), HttpStatus.OK);
     }
     @Operation(summary = "BuscarPorNome", description = "Realiza Busca de Um item por id",method = "GET")
@@ -52,8 +53,8 @@ public class MusicaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @GetMapping("/buscarpornome")
-    public ResponseEntity<MusicaDTO> BuscarPorNome(String nome){
+    @GetMapping(value = "/buscarpornome", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MusicaDTO> BuscarPorNome(@RequestParam String nome){
         return new ResponseEntity<MusicaDTO>(service.BuscarPorNome(nome).getBody(), HttpStatus.OK);
     }
 
@@ -64,8 +65,8 @@ public class MusicaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @PostMapping("/salvar")
-    public ResponseEntity<MusicaDTO> Salvar(MusicaDTO musicaDTO){
+    @PostMapping(value = "/salvar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MusicaDTO> Salvar(@RequestParam("MusicaDTO") MusicaDTO musicaDTO){
         return new ResponseEntity<MusicaDTO>(service.Salvar(musicaDTO).getBody(), HttpStatus.CREATED);
     }
 
@@ -76,8 +77,8 @@ public class MusicaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @PutMapping("/editar")
-    public ResponseEntity<MusicaDTO> Editar(Long id,MusicaDTO musicaDTO){
+    @PutMapping(value = "/editar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MusicaDTO> Editar(@RequestParam Long id, @RequestParam("MusicaDTO") MusicaDTO musicaDTO){
         return new ResponseEntity<MusicaDTO>(service.Editar(id, musicaDTO).getBody() ,HttpStatus.OK);
     }
 
@@ -88,8 +89,8 @@ public class MusicaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Ops algo deu errado"),
     })
-    @DeleteMapping("/deletar")
-    public ResponseEntity<MusicaDTO> Excluir(Long id){
+    @DeleteMapping(value = "/deletar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MusicaDTO> Excluir(@RequestParam Long id){
         return new ResponseEntity<MusicaDTO>(service.Excluir(id).getBody(), HttpStatus.OK);
     }
 

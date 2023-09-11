@@ -50,4 +50,30 @@ controllers
 	confgurar swagger...ok
 }
 7.
-teste
+preparativos de para testes
+	
+	musica
+		anotações controller....ok
+		pronto para teste....ok
+	eventos
+		anotações controller....ok
+		pronto para teste....ok
+	integrante
+		anotações controller....ok
+		pronto para teste....ok
+	banda
+		anotações controller....ok
+		pronto para teste....ok	
+
+8.teste
+	{
+
+	musicas
+		status....
+	eventos
+		status....
+	integrantes
+		status....
+	banda
+		status....
+	}
