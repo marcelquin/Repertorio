@@ -65,15 +65,17 @@ preparativos de para testes
 		anotações controller....ok
 		pronto para teste....ok	
 
-8.teste
+8.teste iniciais
 	{
 
 	musicas
-		status....
+		status.... ok
 	eventos
-		status....
+		status.... ok
 	integrantes
-		status....
+		status.... ok
 	banda
-		status....
+		status.... ok
 	}
+9. adição de segurança
+	liberando rotas(sem analise de risco)....
