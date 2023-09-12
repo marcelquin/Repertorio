@@ -78,4 +78,6 @@ preparativos de para testes
 		status.... ok
 	}
 9. adição de segurança
+	
+	recolocando security...
 	liberando rotas(sem analise de risco)....
