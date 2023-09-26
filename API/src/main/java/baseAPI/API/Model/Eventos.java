@@ -25,7 +25,7 @@ public class Eventos {
     private String evento;
     private Date data;
     @Lob
-    private byte[] banner;
+    private Blob banner;
     @Column(name = "Valor_Cache")
     private Double valorCache;
     @Lob

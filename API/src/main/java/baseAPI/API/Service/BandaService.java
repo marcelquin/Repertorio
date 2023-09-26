@@ -13,12 +13,18 @@ import baseAPI.API.Repository.IntegranteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @Service
 @RequiredArgsConstructor
@@ -27,17 +33,19 @@ public class BandaService {
     @Autowired
     private BandaRepository repository;
 
-    @Autowired
-    private IntegranteRepository integranteRepository;
+    public List<Banda> listar(){
+        try {
+            repository.findAll();
+        }catch (Exception e) {
+            new RuntimeException("ops, algo deu errado");
+            e.getMessage();
+        }
+        return null;
+    }
 
-    @Autowired
-    private EventosRepository eventosRepository;
-
-    public List<Banda> listar() {
-        try{
-            List<Banda> result = new ArrayList<>();
-            result = repository.findAll();
-            return result;
+    public Banda buscarPorId(Long id) {
+        try {
+            repository.findById(id);
         }catch (Exception e){
             new RuntimeException("ops, algo deu errado");
             e.getMessage();
@@ -45,35 +53,25 @@ public class BandaService {
         return null;
     }
 
-    public Banda buscarPorId(Long id){
-        try{
-            if(id != null) repository.findById(id);
-        }catch (Exception e){
-            new RuntimeException("ops, algo deu errado");
-            e.getMessage();
-        }
-        return null;
+    public ResponseEntity<byte[]> verImagemPorId(long id) throws IOException, SQLException {
+        Banda entidade = repository.findById(id).get();
+        byte[] imageBytes = null;
+        imageBytes = entidade.getLogo().getBytes(1, (int) entidade.getLogo().length());
+        return ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
 
-    public BandaDTO Salvar(BandaDTO bandaDTO, MultipartFile logo, IntegranteDTO integranteDTO, EventosDTO eventosDTO){
-        try{
-            if(bandaDTO != null){
-                Banda banda = new Banda();
-                if (logo != null) bandaDTO.setLogo(logo.getBytes());
-                if(integranteDTO != null){
-                    Integrante integrante = new Integrante();
-                    BeanUtils.copyProperties(integranteDTO, integrante);
-                    integranteRepository.save(integrante);
-                }
-                if (eventosDTO != null){
-                    Eventos eventos = new Eventos();
-                    BeanUtils.copyProperties(eventosDTO, eventos);
-                    eventosRepository.save(eventos);
-                }
-                BeanUtils.copyProperties(bandaDTO, banda);
-                repository.save(banda);
+    public BandaDTO salvar(BandaDTO bandaDTO, MultipartFile file) throws SQLException, IOException
+    {
+        try {
+            Banda entidade = new Banda();
+            if(!file.isEmpty()){
+                byte[] bytes = file.getBytes();
+                Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+                bandaDTO.setLogo(blob);
             }
+            BeanUtils.copyProperties(bandaDTO, entidade);
+            repository.save(entidade);
         }catch (Exception e){
             new RuntimeException("ops, algo deu errado");
             e.getMessage();
@@ -81,45 +79,20 @@ public class BandaService {
         return null;
     }
 
-    public BandaDTO Editar(Long id,BandaDTO bandaDTO, MultipartFile logo, IntegranteDTO integranteDTO, EventosDTO eventosDTO){
-        try{
-            if(id != null){
-                if(repository.existsById(id)){
-                    if(bandaDTO != null){
-                        Banda banda = new Banda();
-                        if (logo != null) bandaDTO.setLogo(logo.getBytes());
-                        if(integranteDTO != null){
-                            Integrante integrante = new Integrante();
-                            BeanUtils.copyProperties(integranteDTO, integrante);
-                            integrante.setId(integranteDTO.getId());
-                            integranteRepository.save(integrante);
-                        }
-                        if (eventosDTO != null){
-                            Eventos eventos = new Eventos();
-                            BeanUtils.copyProperties(eventosDTO, eventos);
-                            eventos.setId(eventosDTO.getId());
-                            eventosRepository.save(eventos);
-                        }
-                        BeanUtils.copyProperties(bandaDTO, banda);
-                        banda.setId(bandaDTO.getId());
-                        repository.save(banda);
-                    }
-                }
-            }
-        }catch (Exception e){
-            new RuntimeException("ops, algo deu errado");
-            e.getMessage();
-        }
-        return null;
-    }
 
-    public BandaDTO Excluir(Long id){
-        try{
-            if (id != null){
+    public BandaDTO editar(Long id, BandaDTO bandaDTO, MultipartFile file) throws SQLException, IOException
+    {
+        try {
+            if(repository.existsById(id))
+            {
                 Banda entidade = new Banda();
-                entidade.setId(id);
-                if (repository.existsById(entidade.getId()))
-                    repository.deleteById(entidade.getId());
+                if(!file.isEmpty()){
+                    byte[] bytes = file.getBytes();
+                    Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+                    bandaDTO.setLogo(blob);
+                }
+                BeanUtils.copyProperties(bandaDTO, entidade);
+                repository.save(entidade);
             }
         }catch (Exception e){
             new RuntimeException("ops, algo deu errado");
@@ -127,4 +100,19 @@ public class BandaService {
         }
         return null;
     }
+
+    public BandaDTO deletar(Long id)
+    {
+        try {
+            if(repository.existsById(id))
+            {
+                repository.deleteById(id);
+            }
+        }catch (Exception e){
+            new RuntimeException("ops, algo deu errado");
+            e.getMessage();
+        }
+        return null;
+    }
+
 }

@@ -1,39 +1,48 @@
 package baseAPI.API.Service;
 
+import baseAPI.API.DTO.IntegranteDTO;
 import baseAPI.API.DTO.MusicaDTO;
+import baseAPI.API.Model.Integrante;
 import baseAPI.API.Model.Musica;
+import baseAPI.API.Repository.IntegranteRepository;
 import baseAPI.API.Repository.MusicaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @Service
 @RequiredArgsConstructor
 public class MusicasService {
 
+
     @Autowired
     private MusicaRepository repository;
 
-    public List<Musica> listar() {
-        try{
-            List<Musica> result = new ArrayList<>();
-            result = repository.findAll();
-            return result;
-        }catch (Exception e){
-        new RuntimeException("ops, algo deu errado");
-        e.getMessage();
-    }
+    public List<Musica> listar(){
+        try {
+            repository.findAll();
+        }catch (Exception e) {
+            new RuntimeException("ops, algo deu errado");
+            e.getMessage();
+        }
         return null;
     }
 
-    public Musica buscarPorId(Long id){
-        try{
-            if (id != null){repository.findById(id);}
+    public Musica buscarPorId(Long id) {
+        try {
+            repository.findById(id);
         }catch (Exception e){
             new RuntimeException("ops, algo deu errado");
             e.getMessage();
@@ -41,9 +50,13 @@ public class MusicasService {
         return null;
     }
 
-    public Musica BuscarPorNome(String nome){
-        try{
-            if(nome.length() > 0){repository.findByName(nome);}
+
+    public MusicaDTO salvar(MusicaDTO musicaDTO) throws SQLException, IOException
+    {
+        try {
+            Musica entidade = new Musica();
+            BeanUtils.copyProperties(musicaDTO, entidade);
+            repository.save(entidade);
         }catch (Exception e){
             new RuntimeException("ops, algo deu errado");
             e.getMessage();
@@ -51,43 +64,15 @@ public class MusicasService {
         return null;
     }
 
-    public MusicaDTO Salvar(MusicaDTO musicaDTO){
-        try{
-            if(musicaDTO != null){
-                Musica musica = new Musica();
-                BeanUtils.copyProperties(musicaDTO, musica);
-                repository.save(musica);
-            }
-        }catch (Exception e){
-            new RuntimeException("ops, algo deu errado");
-            e.getMessage();
-        }
-        return null;
-    }
 
-    public MusicaDTO Editar(Long id,MusicaDTO musicaDTO){
-        try{
-            if(repository.existsById(id)){
-                if(musicaDTO != null){
-                    Musica musica = new Musica();
-                    BeanUtils.copyProperties(musicaDTO, musica);
-                    repository.save(musica);
-                }
-            }
-        }catch (Exception e){
-            new RuntimeException("ops, algo deu errado");
-            e.getMessage();
-        }
-        return null;
-    }
-
-    public MusicaDTO Excluir(Long id){
-        try{
-            if (id != null){
+    public MusicaDTO editar(Long id, MusicaDTO musicaDTO) throws SQLException, IOException
+    {
+        try {
+            if(repository.existsById(id))
+            {
                 Musica entidade = new Musica();
-                entidade.setId(id);
-                if (repository.existsById(entidade.getId()))
-                repository.deleteById(entidade.getId());
+                BeanUtils.copyProperties(musicaDTO, entidade);
+                repository.save(entidade);
             }
         }catch (Exception e){
             new RuntimeException("ops, algo deu errado");
@@ -96,7 +81,18 @@ public class MusicasService {
         return null;
     }
 
-
-
+    public MusicaDTO deletar(Long id)
+    {
+        try {
+            if(repository.existsById(id))
+            {
+                repository.deleteById(id);
+            }
+        }catch (Exception e){
+            new RuntimeException("ops, algo deu errado");
+            e.getMessage();
+        }
+        return null;
+    }
 
 }

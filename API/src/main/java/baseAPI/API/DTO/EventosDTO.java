@@ -16,7 +16,8 @@ public class EventosDTO {
     private String contratante;
     private String evento;
     private Date data;
-    private byte[] banner;
+    @Lob
+    private Blob banner;
     private Double valorCache;
     @Lob
     private Blob contrato;
