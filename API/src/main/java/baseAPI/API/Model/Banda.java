@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Blob;
 import java.util.List;
 
 @Data
@@ -22,8 +23,13 @@ public class Banda {
     private String nome;
     @Column(name = "razao_Social")
     private String razaoSocial;
+
+    @Column(name = "CNPJ")
+    private Long cnpj;
+
     @Lob
-    private byte[] logo;
+    private Blob logo;
+
     @Enumerated
     private Ritmo ritmo;
     @OneToMany

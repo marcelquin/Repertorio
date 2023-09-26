@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Blob;
 import java.util.Date;
 
 @Data
@@ -39,7 +40,7 @@ public class Integrante {
     @Enumerated
     private Cargo instrumentista;
     @Lob
-    private byte[] foto;
+    private Blob foto;
     @Column(length = 11)
     private Long telefone;
     @Column(length = 11)

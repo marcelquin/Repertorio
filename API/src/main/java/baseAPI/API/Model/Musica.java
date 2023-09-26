@@ -19,7 +19,7 @@ public class Musica {
     private String nome;
     private String banda;
     private String album;
-    @Column(length = 3)
+    @Column(length = 5)
     private String tom;
     @Column(name = "Cifra")
     private String linkCifra;

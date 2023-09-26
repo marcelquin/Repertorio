@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Blob;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class Eventos {
     @Column(name = "Valor_Cache")
     private Double valorCache;
     @Lob
-    private byte[] contrato;
+    private Blob contrato;
     @OneToMany
     private List<Musica> musicas;
 }

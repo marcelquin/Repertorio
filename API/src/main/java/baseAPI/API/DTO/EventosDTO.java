@@ -1,8 +1,10 @@
 package baseAPI.API.DTO;
 
 import baseAPI.API.Model.Musica;
+import jakarta.persistence.Lob;
 import lombok.Data;
 
+import java.sql.Blob;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +18,8 @@ public class EventosDTO {
     private Date data;
     private byte[] banner;
     private Double valorCache;
-    private byte[] contrato;
+    @Lob
+    private Blob contrato;
     private List<Musica> musicas;
 
 }

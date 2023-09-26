@@ -2,8 +2,10 @@ package baseAPI.API.DTO;
 
 import baseAPI.API.Enum.Cargo;
 import baseAPI.API.Enum.Residencia;
+import jakarta.persistence.Lob;
 import lombok.Data;
 
+import java.sql.Blob;
 import java.util.Date;
 
 @Data
@@ -22,7 +24,8 @@ public class IntegranteDTO {
     private String cidade;
     private String estado;
     private Cargo instrumentista;
-    private byte[] foto;
+    @Lob
+    private Blob foto;
     private Long telefone;
     private Long telefone2;
     private String email;
