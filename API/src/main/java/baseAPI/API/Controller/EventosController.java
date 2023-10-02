@@ -31,13 +31,13 @@ public class EventosController {
     @Autowired
     private final EventosService service;
 
-    @Operation(summary = "Lista Bandas cadastrados", method = "GET")
+    @Operation(summary = "Lista Eventos cadastrados", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
     @GetMapping()
-    public List<Eventos> listarEventos() throws IOException, SQLException
+    public List<Eventos> listarEvetos() throws IOException, SQLException
     {
         return service.listar();
     }
@@ -55,17 +55,17 @@ public class EventosController {
         return  service.buscarPorId(id);
     }
 
-
-    @Operation(summary = "Ver imagem por id", method = "GET")
+    @Operation(summary = "Busca imagem por id", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
             @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
-    @GetMapping("/verImagemPorid")
-    public ResponseEntity<byte[]> verImagemPerfilPorId(@RequestParam Long id) throws SQLException, IOException {
-        return ok().contentType(MediaType.IMAGE_JPEG).body(service.verImagemPorId(id).getBody());
+    @GetMapping("/verimagemporid")
+    public ResponseEntity<byte[]> verImagemPorId(long id) throws IOException, SQLException
+    {
+        return service.verImagemPorId(id);
     }
 
     @Operation(summary = "Salva Novo registro na tabela", method = "POST")
@@ -75,12 +75,60 @@ public class EventosController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)//consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    public String novoEvento(EventosDTO entidade, @RequestPart MultipartFile file, @RequestPart MultipartFile file2 ) throws SQLException, IOException{
-        service.salvar(entidade, file, file2);
-        return "ok";
+    @PostMapping()
+    public EventosDTO novoevento(EventosDTO eventosDTO)
+    {
+        return service.salvar(eventosDTO);
     }
 
+    @Operation(summary = "Salva Nova Musica ao registro", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Salvo realizado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+            @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
+    })
+    @PostMapping("/novamusica")
+    public void adicionarMusica(Long idMusica, Long idEvento)
+    {
+        service.adicionarMusica(idMusica, idEvento);
+    }
+
+    @Operation(summary = "Adiciona banner", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Salvo realizado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+            @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
+    })
+    @PostMapping(value = "/adicionarbanner", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public EventosDTO adicionarBanner(@RequestParam Long id,@RequestPart MultipartFile file)
+    {
+        try{
+            service.adicionarBanner(id, file);
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return null;
+    }
+
+    @Operation(summary = "Adiciona contrato", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Salvo realizado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+            @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
+    })
+    @PostMapping(value = "/adicionarcontrato", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public  EventosDTO adicionarContrato(@RequestParam Long id, @RequestPart MultipartFile file)
+    {
+        try{
+            service.adicionarContrato(id, file);
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return null;
+    }
 
     @Operation(summary = "Edita Registro da tabela", method = "PUT")
     @ApiResponses(value = {
@@ -89,9 +137,11 @@ public class EventosController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
-    @PutMapping(value = "/id", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public EventosDTO EditarEvento(@RequestParam Long id, EventosDTO entidade, @RequestPart MultipartFile file, @RequestPart MultipartFile file2) throws SQLException, IOException { return service.editar(id, entidade,file, file2);  }
-
+    @PutMapping("/id")
+    public EventosDTO editarevento(Long id, EventosDTO eventosDTO)
+    {
+        return  service.editar(id, eventosDTO);
+    }
 
     @Operation(summary = "Deleta Registro da tabela por id", method = "DELETE")
     @ApiResponses(value = {
@@ -101,5 +151,10 @@ public class EventosController {
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
     @DeleteMapping("/id")
-    public EventosDTO deletarBanda(@RequestParam Long id){return service.deletar(id);}
+    public EventosDTO deletareveno(Long id)
+    {
+        return service.deletar(id);
+    }
+
+
 }

@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BandaRepository extends JpaRepository<Banda, Long> {
+    default boolean findByName(String nome) {
+        return false;
+    }
 }

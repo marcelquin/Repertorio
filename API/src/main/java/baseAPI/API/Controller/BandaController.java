@@ -2,6 +2,7 @@ package baseAPI.API.Controller;
 
 
 import baseAPI.API.DTO.BandaDTO;
+import baseAPI.API.DTO.EventosDTO;
 import baseAPI.API.Model.Banda;
 import baseAPI.API.Service.BandaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,10 +38,7 @@ public class BandaController {
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
     @GetMapping()
-    public List<Banda> listarBandas() throws IOException, SQLException
-    {
-        return service.listar();
-    }
+    public List<Banda> listar(){ return service.listar();}
 
     @Operation(summary = "Busca Registro por id", method = "GET")
     @ApiResponses(value = {
@@ -50,37 +48,57 @@ public class BandaController {
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
     @GetMapping("/id")
-    public Banda BuscaBandaPorId(@RequestParam Long id)
-    {
-        return  service.buscarPorId(id);
-    }
+    public Banda buscarbandaPorId(Long id) { return service.buscarPorId(id);}
 
-
-    @Operation(summary = "Ver imagem por id", method = "GET")
+    @Operation(summary = "Busca Registro por id", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
             @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
-    @GetMapping("/verImagemPorid")
-    public ResponseEntity<byte[]> verImagemLogoPorId(@RequestParam Long id) throws SQLException, IOException {
-        return ok().contentType(MediaType.IMAGE_JPEG).body(service.verImagemPorId(id).getBody());
-    }
+    @GetMapping("/verlogoporid")
+    public ResponseEntity<byte[]> verlogoPorId(long id) throws IOException, SQLException {return  service.verImagemPorId(id);}
 
-    @Operation(summary = "Salva Novo registro na tabela", method = "POST")
+    @Operation(summary = "novo registro na tabela", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Salvo realizado com sucesso"),
             @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)//consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    public String novaBanda(BandaDTO entidade, @RequestPart MultipartFile file) throws SQLException, IOException{
-        service.salvar(entidade, file);
-        return "ok";
-    }
+    @PostMapping("/novabanda")
+    public BandaDTO novabanda(BandaDTO bandaDTO){ return service.salvar(bandaDTO);}
 
+    @Operation(summary = "Adiciona Logo", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Salvo realizado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+            @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
+    })
+    @PostMapping(value = "/adicionarLogo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public BandaDTO adicionarLogo(@RequestParam Long id, @RequestPart MultipartFile file) throws IOException, SQLException { return service.adicionarLogo(id, file);}
+
+    @Operation(summary = "Adiciona evento", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Salvo realizado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+            @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
+    })
+    @PostMapping(value = "/adicionarevento")
+    public void adicionaevento(Long idBanda, Long idEvento){ service.adicionaEvento(idBanda, idEvento);}
+
+    @Operation(summary = "Adiciona Integrante", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Salvo realizado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+            @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
+    })
+    @PostMapping(value = "/adicionarintegrante")
+    public void adicionaintegrante(Long idBanda, Long idIntegrante){ service.adicionaIntegrante(idBanda, idIntegrante);}
 
     @Operation(summary = "Edita Registro da tabela", method = "PUT")
     @ApiResponses(value = {
@@ -89,9 +107,8 @@ public class BandaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
-    @PutMapping(value = "/id", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public BandaDTO EditarBanda(@RequestParam Long id, BandaDTO entidade, @RequestPart MultipartFile file) throws SQLException, IOException { return service.editar(id, entidade,file);  }
-
+    @PutMapping("/id")
+    public BandaDTO editarbanda(Long id, BandaDTO bandaDTO){ return service.editar(id, bandaDTO);}
 
     @Operation(summary = "Deleta Registro da tabela por id", method = "DELETE")
     @ApiResponses(value = {
@@ -101,5 +118,6 @@ public class BandaController {
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
     @DeleteMapping("/id")
-    public BandaDTO deletarBanda(@RequestParam Long id){return service.deletar(id);}
+    public BandaDTO deletarbanda(Long id){ return service.deletar(id);}
+
 }

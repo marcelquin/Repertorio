@@ -2,8 +2,6 @@ package baseAPI.API.Service;
 
 import baseAPI.API.DTO.BandaDTO;
 import baseAPI.API.DTO.EventosDTO;
-import baseAPI.API.DTO.IntegranteDTO;
-import baseAPI.API.DTO.MusicaDTO;
 import baseAPI.API.Model.Banda;
 import baseAPI.API.Model.Eventos;
 import baseAPI.API.Model.Integrante;
@@ -32,6 +30,10 @@ public class BandaService {
 
     @Autowired
     private BandaRepository repository;
+    @Autowired
+    private IntegranteRepository iRepository;
+    @Autowired
+    private EventosRepository eRepositort;
 
     public List<Banda> listar(){
         try {
@@ -61,15 +63,10 @@ public class BandaService {
     }
 
 
-    public BandaDTO salvar(BandaDTO bandaDTO, MultipartFile file) throws SQLException, IOException
+    public BandaDTO salvar(BandaDTO bandaDTO)
     {
         try {
             Banda entidade = new Banda();
-            if(!file.isEmpty()){
-                byte[] bytes = file.getBytes();
-                Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-                bandaDTO.setLogo(blob);
-            }
             BeanUtils.copyProperties(bandaDTO, entidade);
             repository.save(entidade);
         }catch (Exception e){
@@ -79,19 +76,63 @@ public class BandaService {
         return null;
     }
 
+    public  BandaDTO adicionarLogo(Long id, MultipartFile file) throws IOException, SQLException {
+        try {
+            if (repository.existsById(id)) {
+                if (!file.isEmpty()) {
+                    Banda banda = new Banda();
+                    byte[] bytes = file.getBytes();
+                    Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+                    banda = repository.findById(id).get();
+                    banda.setLogo(blob);
+                    repository.save(banda);
+                }}
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 
-    public BandaDTO editar(Long id, BandaDTO bandaDTO, MultipartFile file) throws SQLException, IOException
+    public void adicionaEvento(Long idBanda, Long idEvento)
+    {
+        if(eRepositort.existsById(idEvento)){
+            Eventos eventos = eRepositort.findById(idEvento).get();
+            List<Eventos> lista = new ArrayList<>();
+            lista.add(eventos);
+            Banda banda = repository.findById(idBanda).get();
+            if(repository.existsById(idBanda))
+            {
+                banda.setEventos(lista);
+                banda.setId(idBanda);
+            }
+            repository.save(banda);
+        }}
+
+    public void adicionaIntegrante(Long idBanda, Long idIntegrante)
+    {
+        if(iRepository.existsById(idIntegrante)){
+            Integrante integrante = iRepository.findById(idIntegrante).get();
+            List<Integrante> lista = new ArrayList<>();
+            lista.add(integrante);
+            Banda banda = repository.findById(idBanda).get();
+            if(repository.existsById(idBanda))
+            {
+                banda.setIntegrantes(lista);
+                banda.setId(idBanda);
+            }
+            repository.save(banda);
+        }}
+
+    public BandaDTO editar(Long id, BandaDTO bandaDTO)
     {
         try {
             if(repository.existsById(id))
             {
                 Banda entidade = new Banda();
-                if(!file.isEmpty()){
-                    byte[] bytes = file.getBytes();
-                    Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-                    bandaDTO.setLogo(blob);
-                }
                 BeanUtils.copyProperties(bandaDTO, entidade);
+                entidade.setId(id);
                 repository.save(entidade);
             }
         }catch (Exception e){

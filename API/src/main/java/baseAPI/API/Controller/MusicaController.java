@@ -35,7 +35,7 @@ public class MusicaController {
     @Autowired
     private final MusicasService service;
 
-    @Operation(summary = "Lista Bandas cadastrados", method = "GET")
+    @Operation(summary = "Lista Musicas cadastradas", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
@@ -67,8 +67,8 @@ public class MusicaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)//consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    public String novaMusica(MusicaDTO entidade) throws SQLException, IOException{
+    @PostMapping()
+    public String novaMusica(MusicaDTO entidade){
         service.salvar(entidade);
         return "ok";
     }
@@ -81,7 +81,7 @@ public class MusicaController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
-    @PutMapping(value = "/id", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping("/id")
     public MusicaDTO EditarMusica(@RequestParam Long id, MusicaDTO entidade) throws SQLException, IOException { return service.editar(id, entidade);  }
 
 
@@ -93,5 +93,5 @@ public class MusicaController {
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
     @DeleteMapping("/id")
-    public MusicaDTO deletarPerfil(@RequestParam Long id){return service.deletar(id);}
+    public MusicaDTO deletarmusica(@RequestParam Long id){return service.deletar(id);}
 }

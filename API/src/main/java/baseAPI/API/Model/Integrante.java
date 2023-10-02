@@ -7,8 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Blob;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -26,7 +28,8 @@ public class Integrante {
     @Column(length = 11)
     private Long cpf;
     @Column(name = "Data_Nascimento")
-    private Date dataNascimento;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dataNascimento;
     private String logradouro;
     private String numero;
     private String bairro;

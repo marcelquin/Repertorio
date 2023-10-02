@@ -1,11 +1,10 @@
 package baseAPI.API.Controller;
 
 
-import baseAPI.API.DTO.BandaDTO;
 import baseAPI.API.DTO.IntegranteDTO;
-import baseAPI.API.Model.Banda;
+
 import baseAPI.API.Model.Integrante;
-import baseAPI.API.Service.BandaService;
+
 import baseAPI.API.Service.IntegrantesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,15 +32,15 @@ import static org.springframework.http.ResponseEntity.ok;
 public class IntegranteController {
 
     @Autowired
-    private final BandaService service;
+    private final IntegrantesService service;
 
-    @Operation(summary = "Lista Bandas cadastrados", method = "GET")
+    @Operation(summary = "Lista Integrantes cadastrados", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
     @GetMapping()
-    public List<Banda> listarIntegrante() throws IOException, SQLException
+    public List<Integrante> listarintegrantes() throws IOException, SQLException
     {
         return service.listar();
     }
@@ -54,24 +53,23 @@ public class IntegranteController {
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
     @GetMapping("/id")
-    public Banda BuscaIntegrantePorId(@RequestParam Long id)
+    public Integrante BuscaintegrantePorId(@RequestParam Long id)
     {
         return  service.buscarPorId(id);
     }
 
-
-    @Operation(summary = "Ver imagem por id", method = "GET")
+    @Operation(summary = "Busca Registro por id", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
             @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
-    @GetMapping("/verImagemPorid")
-    public ResponseEntity<byte[]> verImagemIntegrantePorId(@RequestParam Long id) throws SQLException, IOException {
-        return ok().contentType(MediaType.IMAGE_JPEG).body(service.verImagemPorId(id).getBody());
+    @GetMapping("/verimagemporid")
+    public ResponseEntity<byte[]> verImagemPorId(long id) throws IOException, SQLException
+    {
+        return service.verImagemPorId(id);
     }
-
     @Operation(summary = "Salva Novo registro na tabela", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Salvo realizado com sucesso"),
@@ -79,12 +77,29 @@ public class IntegranteController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)//consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    public String novoIntegrante(BandaDTO entidade, @RequestPart MultipartFile file) throws SQLException, IOException{
-        service.salvar(entidade, file);
-        return "ok";
+    @PostMapping()
+    public IntegranteDTO novointegrante(IntegranteDTO integranteDTO)
+    {
+        return service.salvar(integranteDTO);
     }
 
+    @Operation(summary = "Adiciona imagem ao registro", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Salvo realizado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+            @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
+    })
+    @PostMapping(value = "/adicionarFoto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public IntegranteDTO adicionarFoto(@RequestParam Long id,@RequestPart MultipartFile file) throws IOException, SQLException
+    {
+        try{
+            service.adicionarFoto(id, file);
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return null;
+    }
 
     @Operation(summary = "Edita Registro da tabela", method = "PUT")
     @ApiResponses(value = {
@@ -93,9 +108,11 @@ public class IntegranteController {
             @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
-    @PutMapping(value = "/id", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public BandaDTO EditarIntegrante(@RequestParam Long id, BandaDTO entidade, @RequestPart MultipartFile file) throws SQLException, IOException { return service.editar(id, entidade,file);  }
-
+    @PutMapping("/id")
+    public IntegranteDTO editaintegrante(Long id, IntegranteDTO integranteDTO)
+    {
+        return service.editar(id,integranteDTO);
+    }
 
     @Operation(summary = "Deleta Registro da tabela por id", method = "DELETE")
     @ApiResponses(value = {
@@ -105,5 +122,8 @@ public class IntegranteController {
             @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
     })
     @DeleteMapping("/id")
-    public BandaDTO deletarIntegrante(@RequestParam Long id){return service.deletar(id);}
+    public IntegranteDTO deletarintegrante(Long id)
+    {
+        return service.deletar(id);
+    }
 }

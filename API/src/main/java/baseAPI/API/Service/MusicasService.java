@@ -51,7 +51,7 @@ public class MusicasService {
     }
 
 
-    public MusicaDTO salvar(MusicaDTO musicaDTO) throws SQLException, IOException
+    public MusicaDTO salvar(MusicaDTO musicaDTO)
     {
         try {
             Musica entidade = new Musica();
@@ -72,6 +72,7 @@ public class MusicasService {
             {
                 Musica entidade = new Musica();
                 BeanUtils.copyProperties(musicaDTO, entidade);
+                entidade.setId(id);
                 repository.save(entidade);
             }
         }catch (Exception e){

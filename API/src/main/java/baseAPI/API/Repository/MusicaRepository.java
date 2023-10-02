@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MusicaRepository extends JpaRepository<Musica, Long> {
 
-    default void findByName(String nome) {}
+    default boolean findByName(String nome) {
+        return false;
+    }
 }

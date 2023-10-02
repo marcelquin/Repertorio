@@ -1,8 +1,6 @@
 package baseAPI.API.DTO;
 
 import baseAPI.API.Enum.Ritmo;
-import baseAPI.API.Model.Eventos;
-import baseAPI.API.Model.Integrante;
 import jakarta.persistence.Lob;
 import lombok.Data;
 
@@ -18,7 +16,7 @@ public class BandaDTO {
     @Lob
     private Blob logo;
     private Ritmo ritmo;
-    private List<Integrante> integrantes;
-    private List<Eventos> eventos;
+    private List<Long> integrantes;
+    private List<Long> eventos;
 
 }

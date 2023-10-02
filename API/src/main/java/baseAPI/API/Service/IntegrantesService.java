@@ -1,12 +1,9 @@
 package baseAPI.API.Service;
 
-import baseAPI.API.DTO.BandaDTO;
 import baseAPI.API.DTO.IntegranteDTO;
-import baseAPI.API.DTO.MusicaDTO;
-import baseAPI.API.Model.Banda;
+
 import baseAPI.API.Model.Integrante;
-import baseAPI.API.Model.Musica;
-import baseAPI.API.Repository.BandaRepository;
+
 import baseAPI.API.Repository.IntegranteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -19,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -60,15 +57,10 @@ public class IntegrantesService {
     }
 
 
-    public IntegranteDTO salvar(IntegranteDTO integranteDTO, MultipartFile file) throws SQLException, IOException
+    public IntegranteDTO salvar(IntegranteDTO integranteDTO)
     {
         try {
             Integrante entidade = new Integrante();
-            if(!file.isEmpty()){
-                byte[] bytes = file.getBytes();
-                Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-                integranteDTO.setFoto(blob);
-            }
             BeanUtils.copyProperties(integranteDTO, entidade);
             repository.save(entidade);
         }catch (Exception e){
@@ -77,20 +69,38 @@ public class IntegrantesService {
         }
         return null;
     }
+    //SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+    public IntegranteDTO adicionarFoto(Long id, MultipartFile file) throws IOException, SQLException
+    {
+        try {
+            if (repository.existsById(id)) {
+            }
+                if (!file.isEmpty()) {
+                    Integrante integrante = new Integrante();
+                    byte[] bytes = file.getBytes();
+                    Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+                    if(repository.existsById(id))
+                    {
+                        integrante = repository.findById(id).get();
+                    }
+                    integrante.setFoto(blob);
+                    repository.save(integrante);
+                }
+            }catch(Exception e){
+                new RuntimeException("ops, algo deu errado");
+                e.getMessage();
+            }
+            return null;
+        }
 
-
-    public IntegranteDTO editar(Long id, IntegranteDTO integranteDTO, MultipartFile file) throws SQLException, IOException
+        public IntegranteDTO editar(Long id, IntegranteDTO integranteDTO)
     {
         try {
             if(repository.existsById(id))
             {
                 Integrante entidade = new Integrante();
-                if(!file.isEmpty()){
-                    byte[] bytes = file.getBytes();
-                    Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-                    integranteDTO.setFoto(blob);
-                }
                 BeanUtils.copyProperties(integranteDTO, entidade);
+                entidade.setId(id);
                 repository.save(entidade);
             }
         }catch (Exception e){

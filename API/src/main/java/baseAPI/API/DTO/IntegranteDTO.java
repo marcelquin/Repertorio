@@ -4,8 +4,10 @@ import baseAPI.API.Enum.Cargo;
 import baseAPI.API.Enum.Residencia;
 import jakarta.persistence.Lob;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Blob;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -15,7 +17,8 @@ public class IntegranteDTO {
     private String nome;
     private String sobrenome;
     private Long cpf;
-    private Date dataNascimento;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dataNascimento;
     private String logradouro;
     private String numero;
     private String bairro;
